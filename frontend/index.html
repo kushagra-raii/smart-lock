@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unlock System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+    }
+    .message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Enter Password</h1>
+  <input type="password" id="password" placeholder="Enter Password" />
+  <button onclick="submitPassword()">Submit</button>
+  <div class="message" id="message"></div>
+
+  <script>
+    const submitPassword = async () => {
+      const password = document.getElementById("password").value;
+        console.log(password)
+      try {
+        const response = await fetch("http://localhost:3000/validate-password", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password }),
+        });
+
+        const data = await response.json();
+        console.log(data)
+
+        const messageDiv = document.getElementById("message");
+
+        if (data.success) {
+          messageDiv.textContent = "Password is correct! Flag set.";
+          messageDiv.style.color = "green";
+        } else {
+          messageDiv.textContent = "Incorrect password.";
+          messageDiv.style.color = "red";
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  </script>
+</body>
+</html>
